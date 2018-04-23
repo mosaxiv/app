@@ -197,17 +197,14 @@ return [
      */
     'EmailTransport' => [
         'default' => [
-            'className' => 'Mail',
-            /*
-             * The following keys are used in SMTP transports:
-             */
-            'host' => 'localhost',
-            'port' => 25,
+            'className' => env('MAIL_DRIVER', 'smtp'),
+            'host' => env('MAIL_HOST', '127.0.0.1'),
+            'port' => env('MAIL_PORT', 2525),
             'timeout' => 30,
-            'username' => null,
-            'password' => null,
+            'username' => env('MAIL_USERNAME'),
+            'password' => env('MAIL_PASSWORD'),
             'client' => null,
-            'tls' => null,
+            'tls' => filter_var(env('MAIL_TLS', false), FILTER_VALIDATE_BOOLEAN),
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
         ],
     ],
@@ -224,9 +221,7 @@ return [
     'Email' => [
         'default' => [
             'transport' => 'default',
-            'from' => 'you@localhost',
-            //'charset' => 'utf-8',
-            //'headerCharset' => 'utf-8',
+            'from' => [env('MAIL_FROM_ADDRESS', 'hello@example.com') => env('MAIL_FROM_NAME', 'Example')],
         ],
     ],
 
@@ -246,18 +241,13 @@ return [
     'Datasources' => [
         'default' => [
             'className' => 'Cake\Database\Connection',
-            'driver' => 'Cake\Database\Driver\Mysql',
+            'driver' => env('DB_DRIVER', 'mysql'),
             'persistent' => false,
-            'host' => 'localhost',
-            /*
-             * CakePHP will use the default DB port based on the driver selected
-             * MySQL on MAMP uses port 8889, MAMP users will want to uncomment
-             * the following line and set the port accordingly
-             */
-            //'port' => 'non_standard_port_number',
-            'username' => 'my_app',
-            'password' => 'secret',
-            'database' => 'my_app',
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', 3306),
+            'username' => env('DB_USERNAME', 'user'),
+            'password' => env('DB_PASSWORD', 'secret'),
+            'database' => env('DB_DATABASE', 'my_app'),
             /*
              * You do not need to set this flag to use full utf-8 encoding (internal default since CakePHP 3.6).
              */
@@ -294,13 +284,13 @@ return [
          */
         'test' => [
             'className' => 'Cake\Database\Connection',
-            'driver' => 'Cake\Database\Driver\Mysql',
+            'driver' => env('DB_DRIVER', 'mysql'),
             'persistent' => false,
-            'host' => 'localhost',
-            //'port' => 'non_standard_port_number',
-            'username' => 'my_app',
-            'password' => 'secret',
-            'database' => 'test_myapp',
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', 3306),
+            'username' => env('DB_USERNAME', 'user'),
+            'password' => env('DB_PASSWORD', 'secret'),
+            'database' => 'test_' . env('DB_DATABASE', 'my_app'),
             //'encoding' => 'utf8mb4',
             'timezone' => 'UTC',
             'cacheMetadata' => true,
